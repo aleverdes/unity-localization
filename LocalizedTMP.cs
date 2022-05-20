@@ -25,7 +25,7 @@ namespace AffenCode
             var localized = new object[LocalizationKeys.Length];
             for (var i = 0; i < LocalizationKeys.Length; i++)
             {
-                localized[i] = LocalizationManager.Localization.Localize(LocalizationKeys[i]);
+                localized[i] = Localization.Localize(LocalizationKeys[i]);
             }
             Label.text = string.Format(string.IsNullOrEmpty(StringFormat) ? "{0}" : StringFormat, localized);
         }
