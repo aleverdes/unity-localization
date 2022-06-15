@@ -5,7 +5,12 @@ namespace AffenCode
     public class Localization : MonoBehaviour
     {
         [SerializeField] private TextAsset _localizationCsv;
-        private static LocalizationTable LocalizationTable { get;  set; }
+        [SerializeField] private string _overrideLanguageInEditor;
+        [SerializeField] private bool _onlyEnglishAndRussian;
+        
+        private static LocalizationTable LocalizationTable { get; set; }
+        private static string OverrideLanguageInEditor { get; set; }
+        private static bool OnlyEnglishAndRussian { get; set; }
 
         private void Awake()
         {
@@ -20,6 +25,7 @@ namespace AffenCode
             }
 
             LocalizationTable = new();
+            OverrideLanguageInEditor = _overrideLanguageInEditor;
 
             if (!_localizationCsv)
             {
@@ -65,6 +71,18 @@ namespace AffenCode
 
         public static string GetCurrentLocalizationKey()
         {
+            if (Application.isEditor && !string.IsNullOrEmpty(OverrideLanguageInEditor))
+            {
+                return OverrideLanguageInEditor;
+            }
+
+            if (OnlyEnglishAndRussian)
+            {
+                return Application.systemLanguage is SystemLanguage.Russian or SystemLanguage.Belarusian
+                    ? "ru"
+                    : "en";
+            }
+            
             var languageCode = GetLocalizationKey(Application.systemLanguage);
 
             if (string.IsNullOrEmpty(languageCode))
@@ -154,6 +172,7 @@ namespace AffenCode
         private static void ResetLocalization()
         {
             LocalizationTable = null;
+            OverrideLanguageInEditor = null;
         }
     }
 }
