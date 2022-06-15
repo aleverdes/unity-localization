@@ -26,6 +26,7 @@ namespace AffenCode
 
             LocalizationTable = new();
             OverrideLanguageInEditor = _overrideLanguageInEditor;
+            OnlyEnglishAndRussian = _onlyEnglishAndRussian;
 
             if (!_localizationCsv)
             {
@@ -173,6 +174,7 @@ namespace AffenCode
         {
             LocalizationTable = null;
             OverrideLanguageInEditor = null;
+            OnlyEnglishAndRussian = false;
         }
     }
 }
