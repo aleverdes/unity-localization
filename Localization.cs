@@ -51,11 +51,24 @@ namespace AffenCode
                 LocalizationTable.Elements.Add(lineElements[0], localizedElement);
                 localizedElement.Key = lineElements[0];
 
+                var k = 0;
                 for (var j = 1; j < languages.Length; ++j)
                 {
+                    k++;
                     try
                     {
-                        localizedElement.Values.Add(languages[j], lineElements[j]);
+                        var value = lineElements[k];
+                        if (value.StartsWith("\"") && !value.StartsWith("\"\""))
+                        {
+                            do
+                            {
+                                k++;
+                                value += "," + lineElements[k];
+                            }
+                            while (!value.EndsWith("\"") && !value.StartsWith("\"\""));
+                        }
+                        
+                        localizedElement.Values.Add(languages[j], value);
                     }
                     catch (Exception e)
                     {
