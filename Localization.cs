@@ -55,14 +55,18 @@ namespace AffenCode
                 for (var j = 1; j < languages.Length; ++j)
                 {
                     k++;
+                    var value = lineElements[k];
                     try
                     {
-                        var value = lineElements[k];
                         if (value.StartsWith("\"") && !value.StartsWith("\"\""))
                         {
                             do
                             {
                                 k++;
+                                if (k >= lineElements.Length)
+                                {
+                                    break;
+                                }
                                 value += "," + lineElements[k];
                             }
                             while (!value.EndsWith("\"") && !value.StartsWith("\"\""));
@@ -72,7 +76,7 @@ namespace AffenCode
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"Can't add {languages[j]} = {lineElements[j]}.\n{e}");
+                        Debug.LogError($"Can't add {languages[j]} = \"{value}\".\n{e}");
                     }
                 }
             }
