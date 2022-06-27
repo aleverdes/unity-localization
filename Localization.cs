@@ -70,6 +70,8 @@ namespace AffenCode
                                 value += "," + lineElements[k];
                             }
                             while (!value.EndsWith("\"") && !value.StartsWith("\"\""));
+
+                            value = value.Substring(1, value.Length - 2);
                         }
                         
                         localizedElement.Values.Add(languages[j], value);
