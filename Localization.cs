@@ -53,15 +53,34 @@ namespace AffenCode
                 LocalizationTable.Elements.Add(lineElements[0], localizedElement);
                 localizedElement.Key = lineElements[0];
 
+                var k = 0;
                 for (var j = 1; j < languages.Length; ++j)
                 {
+                    k++;
+                    var value = lineElements[k];
                     try
                     {
-                        localizedElement.Values.Add(languages[j], lineElements[j]);
+                        if (value.StartsWith("\"") && !value.StartsWith("\"\""))
+                        {
+                            do
+                            {
+                                k++;
+                                if (k >= lineElements.Length)
+                                {
+                                    break;
+                                }
+                                value += "," + lineElements[k];
+                            }
+                            while (!value.EndsWith("\"") && !value.StartsWith("\"\""));
+
+                            value = value.Substring(1, value.Length - 2);
+                        }
+                        
+                        localizedElement.Values.Add(languages[j], value);
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"Can't add {languages[j]} = {lineElements[j]}.\n{e}");
+                        Debug.LogError($"Can't add {languages[j]} = \"{value}\".\n{e}");
                     }
                 }
             }
