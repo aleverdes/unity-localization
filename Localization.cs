@@ -12,6 +12,8 @@ namespace AffenCode
         private static string OverrideLanguageInEditor { get; set; }
         private static bool OnlyEnglishAndRussian { get; set; }
 
+        private static string CurrentLanguageCode { get; set; }
+
         private void Awake()
         {
             Parse();
@@ -72,6 +74,28 @@ namespace AffenCode
 
         public static string GetCurrentLocalizationKey()
         {
+            if (!string.IsNullOrEmpty(CurrentLanguageCode))
+            {
+                return CurrentLanguageCode;
+            }
+            
+#if !UNITY_EDITOR && UNITY_WEBGL
+            if (URLParameters.GetSearchParameters().TryGetValue("lang", out var lang))
+            {
+                Debug.LogError("Yes! Lang is " + lang);
+                CurrentLanguageCode = lang;
+                return lang;
+            }
+            else
+            {
+                Debug.LogError("NO!!!!");
+                foreach (var pair in URLParameters.GetSearchParameters())
+                {
+                    Debug.LogError(pair.Key + " = " + pair.Value);
+                }
+            }
+#endif
+
             if (Application.isEditor && !string.IsNullOrEmpty(OverrideLanguageInEditor))
             {
                 return OverrideLanguageInEditor;
@@ -96,6 +120,7 @@ namespace AffenCode
                 languageCode = "en";
             }
 
+            CurrentLanguageCode = languageCode;
             return languageCode;
         }
 
@@ -175,6 +200,7 @@ namespace AffenCode
             LocalizationTable = null;
             OverrideLanguageInEditor = null;
             OnlyEnglishAndRussian = false;
+            CurrentLanguageCode = null;
         }
     }
 }
