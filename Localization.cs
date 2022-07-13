@@ -101,13 +101,11 @@ namespace AffenCode
 #if !UNITY_EDITOR && UNITY_WEBGL
             if (URLParameters.GetSearchParameters().TryGetValue("lang", out var lang))
             {
-                Debug.LogError("Yes! Lang is " + lang);
                 CurrentLanguageCode = lang;
                 return lang;
             }
             else
             {
-                Debug.LogError("NO!!!!");
                 foreach (var pair in URLParameters.GetSearchParameters())
                 {
                     Debug.LogError(pair.Key + " = " + pair.Value);
